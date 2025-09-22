@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COPA RESPETO</title>
+    <style>
+        /* =========================
+           CSS RESET & BASE STYLES
+           ========================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           LAYOUT COMPONENTS
+           ========================= */
+        .container {
+            max-width: 95vw;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            padding: 3.5rem 0;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            margin-bottom: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* =========================
+           NAVIGATION
+           ========================= */
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .nav-btn {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border: none;
+            color: white;
+            padding: 18px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            background: linear-gradient(145deg, #3498db, #2980b9);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            transform: scale(1.05);
+        }
+
+        /* =========================
+           SECTIONS
+           ========================= */
+        .section {
+            display: none;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 4rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            margin-bottom: 3rem;
+            min-height: 80vh;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: #ff6b6b;
+            font-size: 3rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* =========================
+           PLAYERS SECTION
+           ========================= */
+        .players-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+
+        .player-card {
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            border-radius: 15px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            border-left: 6px solid #4ecdc4;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 280px;
+        }
+
+        .player-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-left: 4px solid #f39c12;
+        }
+
+        /* NEW STYLES FOR PLAYER CARD IMAGE */
+        .player-card-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #4ecdc4;
+            float: right;
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover .player-card-image {
+            border-color: #f39c12;
+            transform: scale(1.05);
+        }
+
+        .player-card-content {
+            overflow: hidden;
+        }
+
+        .player-name {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 1rem;
+        }
+
+        .player-card-info {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .player-card-info strong {
+            color: #4ecdc4;
+        }
+
+        /* =========================
+           MODAL COMPONENTS
+           ========================= */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+        }
+
+        .modal-content.large {
+            max-width: 95vw;
+            width: 95vw;
+            max-height: 95vh;
+            height: 95vh;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+
+        .modal-content.player-modal {
+            max-width: 98vw;
+            width: 98vw;
+            max-height: 95vh;
+            height: auto;
+            min-height: 85vh;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            background: rgba(231, 76, 60, 0.8);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(231, 76, 60, 1);
+            transform: scale(1.1);
+        }
+
+        .player-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: block;
+            border: 4px solid #4ecdc4;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* NEW STYLES FOR LARGE PLAYER MODAL */
+        .player-modal-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .player-image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .player-image-large {
+            width: 100%;
+            max-width: 750px;
+            height: 750px;
+            border-radius: 20px;
+            border: 5px solid #4ecdc4;
+            object-fit: cover;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .player-image-large:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+        }
+
+        .player-info-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-player-name {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #f39c12;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-player-name-large {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #f39c12;
+            text-align: left;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .player-detail {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .player-detail-large {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 6px solid #4ecdc4;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .player-detail-large:hover {
+            transform: translateX(5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .detail-label {
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        /* =========================
+           GAME MODALS
+           ========================= */
+        .game-modal-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 3px solid rgba(78, 205, 196, 0.3);
+        }
+
+        .game-modal-title {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+            margin-bottom: 1rem;
+        }
+
+        .scores-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .group-container {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(78, 205, 196, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .group-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #4ecdc4, #45b7d1);
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .fixture-section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(78, 205, 196, 0.15);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: inset 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .fixture-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .fixture-title {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .fixture-groups {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .fixture-group {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .fixture-round {
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 2rem;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .fixture-round h5 {
+            color: #e74c3c;
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .match-card {
+            background: linear-gradient(145deg, #34495e, #2c3e50);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border-left: 4px solid #e74c3c;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .match-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+            border-left-color: #4ecdc4;
+        }
+
+        .match-header {
+            color: #4ecdc4;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: rgba(78, 205, 196, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .match-players {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        .player-vs {
+            color: #f39c12;
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+        }
+
+        .vs-separator {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin: 0 1rem;
+        }
+
+        .match-status {
+            text-align: center;
+            color: #95a5a6;
+            font-size: 1rem;
+            margin-top: 1rem;
+            background: rgba(149, 165, 166, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        /* =========================
+           LEADERBOARD
+           ========================= */
+        .leaderboard {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .leaderboard table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard th {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            padding: 2rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .leaderboard td {
+            padding: 1.8rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .leaderboard tr:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .position-1 { color: #f1c40f; font-weight: bold; }
+        .position-2 { color: #bdc3c7; font-weight: bold; }
+        .position-3 { color: #e67e22; font-weight: bold; }
+
+        /* =========================
+           GAMES GRID
+           ========================= */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .game-card {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .game-card h3 {
+            color: #4ecdc4;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-card.full-width {
+            grid-column: 1 / -1;
+            cursor: pointer;
+        }
+
+        .dual-groups {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .group-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .click-hint {
+            margin-top: 1rem;
+            text-align: center;
+            color: #4ecdc4;
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           NEWS SECTION
+           ========================= */
+        .news-item {
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 18px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            border-left: 6px solid #3498db;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+        }
+
+        .news-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+        }
+
+        .news-date {
+            color: #95a5a6;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .news-title {
+            color: #3498db;
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            font-weight: bold;
+        }
+
+        .news-item p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           RESPONSIVE DESIGN
+           ========================= */
+        @media (max-width: 1200px) {
+            .scores-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .fixture-groups {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .modal-content.large {
+                padding: 2rem;
+            }
+
+            .player-modal-content {
+                gap: 2rem;
+            }
+
+            .player-image-large {
+                width: 100%;
+                max-width: 600px;
+                height: 600px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            header {
+                padding: 2.5rem 0;
+            }
+            
+            .nav-btn {
+                padding: 14px 24px;
+                font-size: 1.1rem;
+            }
+            
+            .section {
+                padding: 2.5rem;
+                min-height: 70vh;
+                margin-bottom: 2rem;
+            }
+            
+            .section h2 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+            
+            .modal-content.large {
+                padding: 1.5rem;
+                max-width: 98vw;
+                width: 98vw;
+            }
+
+            .modal-content.player-modal {
+                max-width: 98vw;
+                width: 98vw;
+                max-height: 95vh;
+                padding: 1.5rem;
+            }
+            
+            .game-modal-title {
+                font-size: 2rem;
+            }
+            
+            .match-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .players-list {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .player-card {
+                padding: 2rem;
+                min-height: 250px;
+            }
+
+            .player-card-image {
+                width: 100px;
+                height: 100px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .game-card {
+                min-height: 350px;
+                padding: 2rem;
+            }
+
+            .game-card h3 {
+                font-size: 1.7rem;
+            }
+
+            .leaderboard th {
+                padding: 1.5rem 0.5rem;
+                font-size: 1.2rem;
+            }
+
+            .leaderboard td {
+                padding: 1.3rem 0.5rem;
+                font-size: 1.1rem;
+            }
+
+            .news-item {
+                padding: 2rem;
+            }
+
+            .news-title {
+                font-size: 1.5rem;
+            }
+
+            .news-item p {
+                font-size: 1.1rem;
+            }
+
+            .player-modal-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .player-image-large {
+                width: 100%;
+                max-width: 400px;
+                height: 400px;
+                margin: 0 auto 2rem;
+            }
+
+            .modal-player-name-large {
+                text-align: center;
+                font-size: 2.5rem;
+            }
+        }
+
+        /* =========================
+           SCROLLBAR STYLING
+           ========================= */
+        .modal-content.large {
+            scrollbar-width: thin;
+            scrollbar-color: #4ecdc4 #2c3e50;
+        }
+
+        .modal-content.large::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .modal-content.large::-webkit-scrollbar-track {
+            background: #2c3e50;
+            border-radius: 10px;
+        }
+
+        .modal-content.large::-webkit-scrollbar-thumb {
+            background: #4ecdc4;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 COPA RESPETO🏆</h1>
+            <p class="subtitle">• Counter-Strike 2 • Pummel Party • Tekken • FIFA • Mortal Kombat • Half Life</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" onclick="showSection('players')">👥 Jugadores</button>
+            <button class="nav-btn" onclick="showSection('leaderboard')">🏆 Tabla General</button>
+            <button class="nav-btn" onclick="showSection('news')">📰 Noticias</button>
+            <button class="nav-btn" onclick="showSection('scores')">⚡ Puntajes</button>
+        </nav>
+
+        <!-- PLAYERS SECTION -->
+        <div id="players" class="section active">
+            <h2>👥 Perfiles de Jugadores</h2>
+            <p style="text-align: center; color: #95a5a6; margin-bottom: 2rem;">Haz clic en cualquier jugador para ver su perfil completo</p>
+            <div class="players-list" id="playersList">
+                <!-- Players will be rendered dynamically -->
+            </div>
+        </div>
+
+        <!-- LEADERBOARD SECTION -->
+        <div id="leaderboard" class="section">
+            <h2>🏆 Tabla General de Puntos</h2>
+            <div class="leaderboard">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Posición</th>
+                            <th>Jugador</th>
+                            <th>Counter-Strike 2</th>
+                            <th>Pummel Party</th>
+                            <th>Tekken</th>
+                            <th>FIFA</th>
+                            <th>Mortal Kombat</th>
+                            <th>Half Life</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Dynamically updated -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- NEWS SECTION -->
+        <div id="news" class="section">
+            <h2>📰 NOTICIAS DEL TORNEO</h2>
+            <div id="newsList">
+                <div class="news-item">
+                    <div class="news-date">20 de Septiembre, 2025</div>
+                    <div class="news-title">🚀 ¡Torneo Gaming Championship Oficialmente Iniciado!</div>
+                    <p>El torneo más esperado del año ha comenzado. 6 juegos épicos, jugadores increíbles y premios espectaculares te esperan.</p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">19 de Septiembre, 2025</div>
+                    <div class="news-title">🎯 Reglas y Formato del Torneo</div>
+                    <p>Se ha publicado el reglamento oficial. Cada juego otorga puntos según el rendimiento, con playoffs eliminatorios para los mejores.</p>
+                </div>
+                <div class="news-item">
+                    <div class="news-date">18 de Septiembre, 2025</div>
+                    <div class="news-title">🏆 Premios Anunciados</div>
+                    <p>Los premios para los ganadores han sido revelados. ¡El campeón se llevará un premio espectacular!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCORES SECTION -->
+        <div id="scores" class="section">
+            <h2>⚡ Puntajes por Juego</h2>
+            <div class="games-grid">
+                <!-- Counter-Strike 2 -->
+                <div class="game-card">
+                    <h3>🔫 Counter-Strike 2</h3>
+                    <div class="leaderboard">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Jugador</th>
+                                    <th>Puntos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cs2Scores">
+                                <!-- Dynamically filled -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pummel Party -->
+                <div class="game-card">
+                    <h3>🎉 Pummel Party</h3>
+                    <div class="leaderboard">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Jugador</th>
+                                    <th>Puntos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pummelScores">
+                                <!-- Dynamically filled -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tekken -->
+                <div class="game-card full-width" onclick="openGameModal('tekken')">
+                    <h3>👊 Tekken</h3>
+                    <div class="dual-groups">
+                        <div>
+                            <h4 class="group-header" style="color: #4ecdc4;">🥇 Grupo A</h4>
+                            <div class="leaderboard">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Jugador</th>
+                                            <th>Puntos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tekkenScoresA">
+                                        <!-- Dynamically filled -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="group-header" style="color: #f39c12;">🥈 Grupo B</h4>
+                            <div class="leaderboard">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Jugador</th>
+                                            <th>Puntos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tekkenScoresB">
+                                        <!-- Dynamically filled -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="click-hint">
+                        👆 Clic para ver fixture completo y enfrentamientos
+                    </div>
+                </div>
+
+                <!-- FIFA -->
+                <div class="game-card">
+                    <h3>⚽ FIFA</h3>
+                    <div class="leaderboard">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Jugador</th>
+                                    <th>Puntos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fifaScores">
+                                <!-- Dynamically filled -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Mortal Kombat -->
+                <div class="game-card full-width" onclick="openGameModal('mk')">
+                    <h3>🥊 Mortal Kombat</h3>
+                    <div class="dual-groups">
+                        <div>
+                            <h4 class="group-header" style="color: #e74c3c;">💀 Grupo A</h4>
+                            <div class="leaderboard">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Jugador</th>
+                                            <th>Puntos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mkScoresA">
+                                        <!-- Dynamically filled -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="group-header" style="color: #f1c40f;">⚡ Grupo B</h4>
+                            <div class="leaderboard">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Jugador</th>
+                                            <th>Puntos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mkScoresB">
+                                        <!-- Dynamically filled -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="click-hint">
+                        👆 Clic para ver fixture completo y enfrentamientos
+                    </div>
+                </div>
+
+                <!-- Half Life -->
+                <div class="game-card">
+                    <h3>🔬 Half Life</h3>
+                    <div class="leaderboard">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Jugador</th>
+                                    <th>Puntos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hlScores">
+                                <!-- Dynamically filled -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!-- PLAYER MODAL -->
+    <div id="playerModal" class="modal">
+        <div class="modal-content player-modal">
+            <span class="close-btn" onclick="closeModal('playerModal')">&times;</span>
+            <div class="player-modal-content">
+                <div class="player-image-section">
+                    <img id="modalPlayerImage" class="player-image-large" src="" alt="Jugador">
+                </div>
+                <div class="player-info-section">
+                    <div id="modalPlayerName" class="modal-player-name-large"></div>
+                    <div id="modalPlayerDetails">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME MODAL -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content large">
+            <span class="close-btn" onclick="closeModal('gameModal')">&times;</span>
+            <div id="gameModalContent">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================
+        // DATA CONFIGURATION
+        // =========================
+        const TOURNAMENT_DATA = {
+            players: [
+                {
+                    name: "Alex_Gamer",
+                    bio: "Especialista en FPS, conocido por sus reflejos increíbles en Counter-Strike",
+                    favoriteGame: "Counter-Strike 2",
+                    achievements: "3x Campeón Regional CS",
+                    age: 24,
+                    country: "Perú",
+                    yearsPlaying: 6,
+                    image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "TekkenMaster",
+                    bio: "Luchador veterano con más de 5 años de experiencia en juegos de pelea",
+                    favoriteGame: "Tekken",
+                    achievements: "Campeón Nacional Tekken 2024",
+                    age: 27,
+                    country: "Perú",
+                    yearsPlaying: 8,
+                    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "FIFALegend",
+                    bio: "Estratega futbolístico, conoce cada formación y jugada del FIFA",
+                    favoriteGame: "FIFA",
+                    achievements: "Top 100 Mundial FIFA",
+                    age: 22,
+                    country: "Perú",
+                    yearsPlaying: 5,
+                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "PartyKing",
+                    bio: "El rey de los party games, nunca pierde en Pummel Party",
+                    favoriteGame: "Pummel Party",
+                    achievements: "50+ victorias consecutivas",
+                    age: 20,
+                    country: "Perú",
+                    yearsPlaying: 3,
+                    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "KombatWarrior",
+                    bio: "Maestro de los Fatalities, domina cada personaje de Mortal Kombat",
+                    favoriteGame: "Mortal Kombat",
+                    achievements: "EVO 2024 Semifinalista",
+                    age: 26,
+                    country: "Perú",
+                    yearsPlaying: 7,
+                    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "HalfLifeHero",
+                    bio: "Speedrunner profesional, conoce cada secreto de Half Life",
+                    favoriteGame: "Half Life",
+                    achievements: "Record Mundial Speedrun",
+                    age: 25,
+                    country: "Perú",
+                    yearsPlaying: 9,
+                    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "ProGamerX",
+                    bio: "Jugador versátil, excelente en todos los géneros de videojuegos",
+                    favoriteGame: "Counter-Strike 2",
+                    achievements: "Múltiples torneos ganados",
+                    age: 23,
+                    country: "Perú",
+                    yearsPlaying: 4,
+                    image: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "ElitePlayer",
+                    bio: "Competidor nato, siempre busca la perfección en cada partida",
+                    favoriteGame: "Tekken",
+                    achievements: "Top 10 Nacional",
+                    age: 28,
+                    country: "Perú",
+                    yearsPlaying: 10,
+                    image: "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "ShadowNinja",
+                    bio: "Maestro del sigilo y la estrategia, especialista en juegos tácticos",
+                    favoriteGame: "Half Life",
+                    achievements: "Speedrun Record Nacional",
+                    age: 21,
+                    country: "Perú",
+                    yearsPlaying: 5,
+                    image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "CyberQueen",
+                    bio: "Gamer femenina que domina todos los géneros con elegancia y precisión",
+                    favoriteGame: "Mortal Kombat",
+                    achievements: "Campeona Regional Femenina",
+                    age: 24,
+                    country: "Perú",
+                    yearsPlaying: 6,
+                    image: "https://images.unsplash.com/photo-1494790108755-2616b612b1d8?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "StormBreaker",
+                    bio: "Jugador agresivo con un estilo único, siempre va por la victoria",
+                    favoriteGame: "FIFA",
+                    achievements: "Top 50 Mundial FIFA",
+                    age: 26,
+                    country: "Perú",
+                    yearsPlaying: 8,
+                    image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop&crop=face"
+                },
+                {
+                    name: "PixelMaster",
+                    bio: "Veterano de los videojuegos, conoce cada truco y mecánica secreta",
+                    favoriteGame: "Pummel Party",
+                    achievements: "100+ Torneos Ganados",
+                    age: 30,
+                    country: "Perú",
+                    yearsPlaying: 15,
+                    image: "https://images.unsplash.com/photo-1639149888905-fb39731f2e6c?w=150&h=150&fit=crop&crop=face"
+                }
+            ],
+
+            scores: {
+                "Alex_Gamer": { cs2: 95, pummel: 0, tekken: 78, fifa: 0, mk: 72, hl: 0 },
+                "TekkenMaster": { cs2: 0, pummel: 0, tekken: 92, fifa: 0, mk: 89, hl: 0 },
+                "FIFALegend": { cs2: 0, pummel: 0, tekken: 82, fifa: 88, mk: 76, hl: 0 },
+                "PartyKing": { cs2: 0, pummel: 90, tekken: 73, fifa: 0, mk: 68, hl: 0 },
+                "KombatWarrior": { cs2: 0, pummel: 0, tekken: 80, fifa: 0, mk: 94, hl: 0 },
+                "HalfLifeHero": { cs2: 0, pummel: 0, tekken: 75, fifa: 0, mk: 81, hl: 87 },
+                "ProGamerX": { cs2: 89, pummel: 0, tekken: 88, fifa: 0, mk: 73, hl: 0 },
+                "ElitePlayer": { cs2: 0, pummel: 0, tekken: 85, fifa: 0, mk: 77, hl: 0 },
+                "ShadowNinja": { cs2: 0, pummel: 0, tekken: 79, fifa: 0, mk: 85, hl: 91 },
+                "CyberQueen": { cs2: 0, pummel: 0, tekken: 84, fifa: 0, mk: 86, hl: 0 },
+                "StormBreaker": { cs2: 0, pummel: 0, tekken: 77, fifa: 83, mk: 79, hl: 0 },
+                "PixelMaster": { cs2: 0, pummel: 88, tekken: 81, fifa: 0, mk: 71, hl: 0 }
+            },
+
+            gameConfig: {
+                tekken: {
+                    title: "👊 TEKKEN - TORNEO TODOS VS TODOS",
+                    subtitle: "Sistema de grupos con enfrentamientos directos",
+                    groupATitle: "🥇 Grupo A",
+                    groupBTitle: "🥈 Grupo B",
+                    colors: {
+                        primary: "#4ecdc4",
+                        secondary: "#f39c12"
+                    }
+                },
+                mk: {
+                    title: "🥊 MORTAL KOMBAT - TORNEO TODOS VS TODOS",
+                    subtitle: "Sistema de grupos con combates mortales",
+                    groupATitle: "💀 Grupo A",
+                    groupBTitle: "⚡ Grupo B",
+                    colors: {
+                        primary: "#e74c3c",
+                        secondary: "#f1c40f"
+                    }
+                }
+            }
+        };
+
+        // =========================
+        // CORE APPLICATION CLASS
+        // =========================
+        class TournamentManager {
+            constructor() {
+                this.data = TOURNAMENT_DATA;
+                this.currentModal = null;
+                this.init();
+            }
+
+            init() {
+                this.renderPlayers();
+                this.updateAllScores();
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('modal')) {
+                        this.closeModal(e.target.id);
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.currentModal) {
+                        this.closeModal(this.currentModal);
+                    }
+                });
+            }
+
+            // =========================
+            // NAVIGATION METHODS
+            // =========================
+            showSection(sectionName) {
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                document.getElementById(sectionName).classList.add('active');
+                
+                const activeBtn = Array.from(document.querySelectorAll('.nav-btn'))
+                    .find(btn => btn.textContent.toLowerCase().includes(sectionName.toLowerCase()) || 
+                         (sectionName === 'players' && btn.textContent.includes('Jugadores')) ||
+                         (sectionName === 'leaderboard' && btn.textContent.includes('Tabla')) ||
+                         (sectionName === 'news' && btn.textContent.includes('Noticias')) ||
+                         (sectionName === 'scores' && btn.textContent.includes('Puntajes')));
+                
+                if (activeBtn) {
+                    activeBtn.classList.add('active');
+                }
+            }
+
+            // =========================
+            // PLAYER METHODS
+            // =========================
+            renderPlayers() {
+                const playersList = document.getElementById('playersList');
+                playersList.innerHTML = '';
+                
+                this.data.players.forEach((player, index) => {
+                    const playerCard = this.createPlayerCard(player, index);
+                    playersList.appendChild(playerCard);
+                });
+            }
+
+            createPlayerCard(player, index) {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                playerCard.onclick = () => this.openPlayerModal(index);
+                playerCard.innerHTML = `
+                    <img src="${player.image}" alt="${player.name}" class="player-card-image" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face'">
+                    <div class="player-card-content">
+                        <div class="player-name">🎮 ${player.name}</div>
+                        <div class="player-card-info"><strong>Especialidad:</strong> ${player.favoriteGame}</div>
+                        <div class="player-card-info"><strong>Bio:</strong> ${player.bio}</div>
+                        <div class="player-card-info"><strong>Logros:</strong> ${player.achievements}</div>
+                        <div class="click-hint">
+                            👆 Clic para ver perfil completo
+                        </div>
+                    </div>
+                `;
+                return playerCard;
+            }
+
+            openPlayerModal(playerIndex) {
+                const player = this.data.players[playerIndex];
+                const modal = document.getElementById('playerModal');
+                const image = document.getElementById('modalPlayerImage');
+                const name = document.getElementById('modalPlayerName');
+                const details = document.getElementById('modalPlayerDetails');
+
+                image.src = player.image;
+                image.alt = player.name;
+                name.textContent = player.name;
+
+                details.innerHTML = `
+                    <div class="player-detail-large">
+                        <div class="detail-label">🎂 Edad</div>
+                        <div class="detail-value" style="font-size: 1.2rem; margin-top: 0.5rem;">${player.age} años</div>
+                    </div>
+                    <div class="player-detail-large">
+                        <div class="detail-label">🌎 País</div>
+                        <div class="detail-value" style="font-size: 1.2rem; margin-top: 0.5rem;">${player.country}</div>
+                    </div>
+                    <div class="player-detail-large">
+                        <div class="detail-label">🎮 Juego Favorito</div>
+                        <div class="detail-value" style="font-size: 1.2rem; margin-top: 0.5rem;">${player.favoriteGame}</div>
+                    </div>
+                    <div class="player-detail-large">
+                        <div class="detail-label">⏱️ Años Jugando</div>
+                        <div class="detail-value" style="font-size: 1.2rem; margin-top: 0.5rem;">${player.yearsPlaying} años</div>
+                    </div>
+                    <div class="player-detail-large">
+                        <div class="detail-label">📖 Biografía</div>
+                        <div class="detail-value" style="font-size: 1.1rem; margin-top: 0.5rem; line-height: 1.6;">${player.bio}</div>
+                    </div>
+                    <div class="player-detail-large">
+                        <div class="detail-label">🏆 Logros</div>
+                        <div class="detail-value" style="font-size: 1.1rem; margin-top: 0.5rem; line-height: 1.6;">${player.achievements}</div>
+                    </div>
+                `;
+
+                this.openModal('playerModal');
+            }
+
+            // =========================
+            // GAME MODAL METHODS
+            // =========================
+            openGameModal(gameType) {
+                const modal = document.getElementById('gameModal');
+                const content = document.getElementById('gameModalContent');
+                
+                if (gameType === 'tekken' || gameType === 'mk') {
+                    content.innerHTML = this.generateGameModalContent(gameType);
+                    this.openModal('gameModal');
+                }
+            }
+
+            generateGameModalContent(gameType) {
+                const config = this.data.gameConfig[gameType];
+                const scoreKey = gameType === 'mk' ? 'mk' : 'tekken';
+                
+                const sortedPlayers = Object.keys(this.data.scores)
+                    .map(player => ({
+                        player: player,
+                        points: this.data.scores[player][scoreKey]
+                    }))
+                    .sort((a, b) => b.points - a.points);
+
+                const groupA = sortedPlayers.slice(0, 6);
+                const groupB = sortedPlayers.slice(6, 12);
+
+                return `
+                    <div class="game-modal-header">
+                        <h2 class="game-modal-title" style="background: linear-gradient(45deg, ${config.colors.primary}, ${config.colors.secondary}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            ${config.title}
+                        </h2>
+                        <p style="color: #95a5a6; font-size: 1.2rem;">${config.subtitle}</p>
+                    </div>
+                    
+                    <div class="scores-section">
+                        <div class="group-container">
+                            <h3 class="group-title" style="background: linear-gradient(145deg, ${config.colors.primary}, ${this.adjustColor(config.colors.primary)});">${config.groupATitle}</h3>
+                            ${this.generateGroupTable(groupA, scoreKey)}
+                        </div>
+                        <div class="group-container">
+                            <h3 class="group-title" style="background: linear-gradient(145deg, ${config.colors.secondary}, ${this.adjustColor(config.colors.secondary)});">${config.groupBTitle}</h3>
+                            ${this.generateGroupTable(groupB, scoreKey)}
+                        </div>
+                    </div>
+                    <div style="text-align:center; margin-bottom:2rem;">
+                        <button onclick="window.location.href='tekken_playoffs.html'" 
+                                style="padding: 12px 24px; 
+                                       font-size: 1.2rem; 
+                                       font-weight: bold; 
+                                       border-radius: 10px; 
+                                       border: none; 
+                                       background: linear-gradient(145deg, #4ecdc4, #45b7d1); 
+                                       color: white; 
+                                       cursor: pointer; 
+                                       box-shadow: 0 6px 20px rgba(0,0,0,0.3); 
+                                       transition: all 0.3s ease;">
+                            🎮 Ver Playoffs Tekken (Upper & Lower Brackets)
+                        </button>
+                    </div>
+
+                    <div class="fixture-section">
+                        <div class="fixture-header">
+                            <h3 class="fixture-title">⚔️ FIXTURE COMPLETO - TODOS VS TODOS</h3>
+                            <p style="color: #95a5a6; font-size: 1.1rem; margin-top: 1rem;">
+                                Cada jugador se enfrentará a todos los demás de su grupo
+                            </p>
+                        </div>
+                        <div class="fixture-groups">
+                            ${this.generateFixtureGroup(groupA, 'A', config.colors.primary)}
+                            ${this.generateFixtureGroup(groupB, 'B', config.colors.secondary)}
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateGroupTable(group, scoreKey) {
+                const tableRows = group.map((player, index) => {
+                    let positionClass = '';
+                    if (index === 0) positionClass = 'position-1';
+                    else if (index === 1) positionClass = 'position-2';
+                    else if (index === 2) positionClass = 'position-3';
+
+                    const matches = 5;
+                    const victories = Math.floor(player.points / 20);
+
+                    return `
+                        <tr>
+                            <td class="${positionClass}">${index + 1}°</td>
+                            <td class="${positionClass}">${player.player}</td>
+                            <td class="${positionClass}"><strong>${player.points}</strong></td>
+                            <td class="${positionClass}">${matches}</td>
+                            <td class="${positionClass}">${victories}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="leaderboard">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Pos</th>
+                                    <th>Jugador</th>
+                                    <th>Puntos</th>
+                                    <th>Partidas</th>
+                                    <th>Victorias</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            generateFixtureGroup(group, groupName, color) {
+                const players = group.map(p => p.player);
+                const matches = this.generateAllMatches(players);
+                const rounds = this.organizeMatchesIntoRounds(matches, players.length);
+
+                const roundsHtml = rounds.map((round, roundIndex) => {
+                    const matchCards = round.map((match, matchIndex) => `
+                        <div class="match-card" style="border-left-color: ${color};">
+                            <div class="match-header">Enfrentamiento ${matchIndex + 1}</div>
+                            <div class="match-players">
+                                <span class="player-vs">${match.player1}</span>
+                                <span class="vs-separator" style="color: ${color};">VS</span>
+                                <span class="player-vs">${match.player2}</span>
+                            </div>
+                            <div class="match-status">⏳ Pendiente</div>
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div class="fixture-round" style="border-left-color: ${color};">
+                            <h5 style="color: ${color};">📅 Ronda ${roundIndex + 1}</h5>
+                            <div class="match-grid">
+                                ${matchCards}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="fixture-group">
+                        <h4 style="font-size: 2rem; text-align: center; margin-bottom: 2rem; padding: 1rem; border-radius: 15px; background: linear-gradient(145deg, ${color}, ${this.adjustColor(color)}); color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.4);">
+                            🏆 GRUPO ${groupName}
+                        </h4>
+                        ${roundsHtml}
+                    </div>
+                `;
+            }
+
+            generateAllMatches(players) {
+                const matches = [];
+                for (let i = 0; i < players.length; i++) {
+                    for (let j = i + 1; j < players.length; j++) {
+                        matches.push({
+                            player1: players[i],
+                            player2: players[j]
+                        });
+                    }
+                }
+                return matches;
+            }
+
+            organizeMatchesIntoRounds(matches, numPlayers) {
+                const rounds = [];
+                const usedMatches = new Set();
+                
+                while (usedMatches.size < matches.length) {
+                    const round = [];
+                    const playersInRound = new Set();
+                    
+                    matches.forEach((match, index) => {
+                        if (!usedMatches.has(index) && 
+                            !playersInRound.has(match.player1) && 
+                            !playersInRound.has(match.player2)) {
+                            round.push(match);
+                            playersInRound.add(match.player1);
+                            playersInRound.add(match.player2);
+                            usedMatches.add(index);
+                        }
+                    });
+                    
+                    if (round.length > 0) {
+                        rounds.push(round);
+                    }
+                }
+                
+                return rounds;
+            }
+
+            adjustColor(color) {
+                // Simple color adjustment for gradients
+                const colorMap = {
+                    '#4ecdc4': '#45b7d1',
+                    '#f39c12': '#e67e22',
+                    '#e74c3c': '#c0392b',
+                    '#f1c40f': '#f39c12'
+                };
+                return colorMap[color] || color;
+            }
+
+            // =========================
+            // SCORE UPDATE METHODS
+            // =========================
+            updateAllScores() {
+                this.updateLeaderboard();
+                this.updateGameScores();
+            }
+
+            updateLeaderboard() {
+                const tbody = document.getElementById('leaderboardBody');
+                
+                const leaderboard = Object.keys(this.data.scores).map(player => {
+                    const playerScores = this.data.scores[player];
+                    const total = Object.values(playerScores).reduce((sum, score) => sum + score, 0);
+                    return { player, ...playerScores, total };
+                }).sort((a, b) => b.total - a.total);
+
+                tbody.innerHTML = leaderboard.map((row, index) => {
+                    let positionClass = '';
+                    if (index === 0) positionClass = 'position-1';
+                    else if (index === 1) positionClass = 'position-2';
+                    else if (index === 2) positionClass = 'position-3';
+                    
+                    return `
+                        <tr>
+                            <td class="${positionClass}">${index + 1}°</td>
+                            <td class="${positionClass}">${row.player}</td>
+                            <td>${row.cs2}</td>
+                            <td>${row.pummel}</td>
+                            <td>${row.tekken}</td>
+                            <td>${row.fifa}</td>
+                            <td>${row.mk}</td>
+                            <td>${row.hl}</td>
+                            <td class="${positionClass}"><strong>${row.total}</strong></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            updateGameScores() {
+                // Update individual games
+                const games = {
+                    cs2: 'cs2Scores',
+                    pummel: 'pummelScores', 
+                    fifa: 'fifaScores',
+                    hl: 'hlScores'
+                };
+
+                Object.entries(games).forEach(([gameKey, elementId]) => {
+                    const tbody = document.getElementById(elementId);
+                    const gameLeaderboard = Object.keys(this.data.scores)
+                        .map(player => ({
+                            player: player,
+                            points: this.data.scores[player][gameKey]
+                        }))
+                        .sort((a, b) => b.points - a.points);
+
+                    tbody.innerHTML = gameLeaderboard.map((row, index) => {
+                        let positionClass = '';
+                        if (index === 0) positionClass = 'position-1';
+                        else if (index === 1) positionClass = 'position-2';
+                        else if (index === 2) positionClass = 'position-3';
+                        
+                        return `
+                            <tr>
+                                <td class="${positionClass}">${row.player}</td>
+                                <td class="${positionClass}"><strong>${row.points}</strong></td>
+                            </tr>
+                        `;
+                    }).join('');
+                });
+
+                // Update group games (Tekken and MK)
+                this.updateGroupGameScores('tekken', ['tekkenScoresA', 'tekkenScoresB']);
+                this.updateGroupGameScores('mk', ['mkScoresA', 'mkScoresB']);
+            }
+
+            updateGroupGameScores(gameKey, elementIds) {
+                const players = Object.keys(this.data.scores)
+                    .map(player => ({
+                        player: player,
+                        points: this.data.scores[player][gameKey]
+                    }))
+                    .sort((a, b) => b.points - a.points);
+
+                const groupA = players.slice(0, 6);
+                const groupB = players.slice(6, 12);
+                const groups = [groupA, groupB];
+
+                groups.forEach((group, groupIndex) => {
+                    const tbody = document.getElementById(elementIds[groupIndex]);
+                    tbody.innerHTML = group.map((row, index) => {
+                        let positionClass = '';
+                        if (index === 0) positionClass = 'position-1';
+                        else if (index === 1) positionClass = 'position-2';
+                        else if (index === 2) positionClass = 'position-3';
+                        
+                        return `
+                            <tr>
+                                <td class="${positionClass}">${row.player}</td>
+                                <td class="${positionClass}"><strong>${row.points}</strong></td>
+                            </tr>
+                        `;
+                    }).join('');
+                });
+            }
+
+            // =========================
+            // MODAL MANAGEMENT
+            // =========================
+            openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.add('active');
+                this.currentModal = modalId;
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.remove('active');
+                this.currentModal = null;
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // =========================
+        // GLOBAL FUNCTIONS FOR ONCLICK HANDLERS
+        // =========================
+        let tournamentManager;
+
+        function showSection(sectionName) {
+            tournamentManager.showSection(sectionName);
+        }
+
+        function openGameModal(gameType) {
+            tournamentManager.openGameModal(gameType);
+        }
+
+        function closeModal(modalId) {
+            tournamentManager.closeModal(modalId);
+        }
+
+        // =========================
+        // INITIALIZATION
+        // =========================
+        document.addEventListener('DOMContentLoaded', function() {
+            tournamentManager = new TournamentManager();
+        });
+    </script>
+</body>
+</html>
