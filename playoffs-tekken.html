@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Play-Offs Tekken</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: url('https://i.postimg.cc/cJTPs5tf/Imagen-de-Whats-App-2025-09-26-a-las-18-31-12-25d7eac9.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #FFD700;
+      padding: 2rem;
+    }
+
+    h1, .subtitle {
+      text-align: center;
+    }
+
+    .bracket-grid {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .bracket-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .bracket-wrapper, .lower-bracket-wrapper {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .round-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-width: 220px;
+    }
+
+    .round-title {
+      text-align: center;
+      font-weight: bold;
+      color: #FFA500;
+    }
+
+    .match-box {
+      background: rgba(255, 215, 0, 0.05);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 10px;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .player {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+    }
+
+    .player.winner {
+      color: #00FF7F;
+    }
+
+    .player img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    .bracket-final {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bracket-final .round-column {
+      border: 2px solid #FFD700;
+      border-radius: 15px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .btn-volver {
+      display: block;
+      margin: 3rem auto 1rem;
+      text-align: center;
+      font-size: 1.2rem;
+      padding: 0.75rem 2rem;
+      color: black;
+      background: linear-gradient(135deg, gold, orange);
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      transition: all 0.3s ease;
+      width: fit-content;
+    }
+
+    .btn-volver:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Play-Offs Tekken</h1>
+  <div class="subtitle">8 mejores luchadores en eliminación doble</div>
+
+  <div class="bracket-grid">
+    <div class="bracket-left">
+      <div>
+        <h2 class="round-title">Upper Bracket</h2>
+        <div class="bracket-wrapper" id="upperBracketTree"></div>
+      </div>
+      <div>
+        <h2 class="round-title">Lower Bracket</h2>
+        <div class="lower-bracket-wrapper" id="lowerBracketTree"></div>
+      </div>
+    </div>
+    <div class="bracket-final">
+      <div class="round-column" id="grandFinalTree"></div>
+    </div>
+  </div>
+
+  <a href="index.html" class="btn-volver">⬅️ Volver al Torneo</a>
+
+  <script>
+    const playerImages = {
+      "Heihachi": "imagenes/heihachi.jpg",
+      "Kazuya": "imagenes/kazuya.jpg",
+      "Jin": "imagenes/jin.jpg",
+      "Hwoarang": "imagenes/hwoarang.jpg",
+      "King": "imagenes/king.jpg",
+      "Lars": "imagenes/lars.jpg",
+      "Law": "imagenes/law.jpg",
+      "Paul": "imagenes/paul.jpg"
+    };
+
+    const renderPlayer = (name, score, isWinner) => {
+      const imgSrc = playerImages[name] || "imagenes/default.jpg";
+      const playerClass = isWinner ? "player winner" : "player";
+      return `
+        <div class="${playerClass}">
+          <img src="${imgSrc}" alt="${name}">${name}<span>${score}</span>
+        </div>`;
+    };
+
+    const upperRounds = [
+      {
+        title: "Upper Quarterfinals",
+        matches: [
+          ["Heihachi", "Paul", 1, 0],
+          ["Kazuya", "Law", 0, 1],
+          ["Jin", "Lars", 1, 0],
+          ["Hwoarang", "King", 2, 1],
+        ],
+      },
+      {
+        title: "Upper Semifinals",
+        matches: [
+          ["Heihachi", "Law", 2, 0],
+          ["Jin", "Hwoarang", 1, 2],
+        ],
+      },
+      {
+        title: "Upper Final",
+        matches: [["Heihachi", "Hwoarang", 2, 1]],
+      }
+    ];
+
+    const lowerRounds = [
+      {
+        title: "Lower Round 1",
+        matches: [["Kazuya", "Lars", 1, 2], ["Paul", "King", 0, 2]],
+      },
+      {
+        title: "Lower Quarterfinals",
+        matches: [["Lars", "Jin", 2, 1], ["King", "Law", 0, 2]],
+      },
+      {
+        title: "Lower Semifinal",
+        matches: [["Lars", "Law", 2, 0]],
+      },
+      {
+        title: "Lower Final",
+        matches: [["Lars", "Hwoarang", 2, 1]],
+      }
+    ];
+
+    const grandFinal = {
+      title: "Gran Final",
+      matches: [["Heihachi", "Lars", 3, 2]],
+    };
+
+    function renderBracket(rounds, containerId) {
+      const container = document.getElementById(containerId);
+      rounds.forEach(round => {
+        const roundCol = document.createElement("div");
+        roundCol.className = "round-column";
+
+        const roundTitle = document.createElement("div");
+        roundTitle.className = "round-title";
+        roundTitle.textContent = round.title;
+        roundCol.appendChild(roundTitle);
+
+        round.matches.forEach(([p1, p2, s1, s2]) => {
+          const match = document.createElement("div");
+          match.className = "match-box";
+
+          match.innerHTML = `
+            ${renderPlayer(p1, s1, s1 > s2)}
+            ${renderPlayer(p2, s2, s2 > s1)}
+          `;
+
+          roundCol.appendChild(match);
+        });
+
+        container.appendChild(roundCol);
+      });
+    }
+
+    renderBracket(upperRounds, "upperBracketTree");
+    renderBracket(lowerRounds, "lowerBracketTree");
+    renderBracket([grandFinal], "grandFinalTree");
+  </script>
+</body>
+</html>
